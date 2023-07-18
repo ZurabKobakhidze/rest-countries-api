@@ -11,7 +11,7 @@ function Header() {
 export default Header;
 
 const HeaderDiv = styled.div`
-  width: 375px;
+  width: 100%;
   height: 80px;
   flex-shrink: 0;
   background: #FFF;
