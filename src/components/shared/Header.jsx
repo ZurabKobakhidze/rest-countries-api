@@ -1,11 +1,17 @@
+import { Moon } from "assets/index";
 import React from "react";
 import { styled } from "styled-components";
 
 function Header() {
-  return <HeaderDiv>
-    <h2>Where in the world?</h2>
-    <h2></h2>
-  </HeaderDiv>;
+  return (
+    <HeaderDiv>
+      <H2text>Where in the world?</H2text>
+      <MoonDiv>
+        <img src={Moon} alt="" />
+        <H2text2>Dark Mode</H2text2>
+      </MoonDiv>
+    </HeaderDiv>
+  );
 }
 
 export default Header;
@@ -13,7 +19,38 @@ export default Header;
 const HeaderDiv = styled.div`
   width: 100%;
   height: 80px;
-  flex-shrink: 0;
-  background: #FFF;
-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  justify-content: space-between;
+`;
+
+const H2text = styled.h2`
+  color: #111517;
+  font-family: Nunito Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 20px;
+`;
+
+const H2text2 = styled.h2`
+  color: #111517;
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+`;
+
+const MoonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 `;
