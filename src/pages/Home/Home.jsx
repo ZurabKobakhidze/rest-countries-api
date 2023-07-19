@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Header } from "components/shared";
 import { styled } from "styled-components";
 import axios from "axios";
 import { Arrow, SearchIcon } from "assets/index";
 import { Link as RouterLink } from "react-router-dom";
+import { DarkModeContext } from "context/DarkModeContext";
 
 function Home() {
   const [countries, setCountries] = useState([]);
@@ -12,6 +13,8 @@ function Home() {
   const [region, setRegion] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("");
+
+  const { darkMode } = useContext(DarkModeContext);
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -51,7 +54,7 @@ function Home() {
   const options = ["", "Africa", "Americas", "Asia", "Europe", "Oceania"];
 
   return (
-    <Div>
+    <Div $darkMode={darkMode}>
       <Header />
       <SearchDiv>
         <form
@@ -60,13 +63,14 @@ function Home() {
             handleSearch();
           }}
         >
-          <InputDiv>
+          <InputDiv $darkMode={darkMode}>
             <SearchButton src={SearchIcon} alt="" onClick={handleSearch} />
             <InputStyles
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for a country…"
+              $darkMode={darkMode}
             />
             <button type="submit" style={{ display: "none" }}>
               Search
@@ -74,14 +78,14 @@ function Home() {
           </InputDiv>
         </form>
         <DropdownWrapper onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <RegionDiv>
-            <RegionStyles>{selectedRegion || "Filter by Region"}</RegionStyles>
+          <RegionDiv $darkMode={darkMode}>
+            <RegionStyles $darkMode={darkMode}>{selectedRegion || "Filter by Region"}</RegionStyles>
             <img src={Arrow} alt="" />
-          </RegionDiv>
+          </RegionDiv >
           {dropdownOpen && (
-            <OptionsDiv>
+            <OptionsDiv $darkMode={darkMode}>
               {options.map((option, index) => (
-                <Option
+                <Option $darkMode={darkMode}
                   key={index}
                   onClick={() => {
                     setSelectedRegion(option);
@@ -98,32 +102,36 @@ function Home() {
       </SearchDiv>
 
       <Container>
-        {displayedCountries.map((country, index) => (
-          <Link to={`/country/${country.name.common}`}>
-          <CountryDiv key={index}>
-            <img
-              src={country.flags.png}
-              alt={country.name.common}
-              style={{ width: "100%" }}
-            />
-            <InsideBox>
-              <CountryNames>{country.name.common}</CountryNames>
-              <DetailsDiv>
-                <div>
-                  <Label>Population: </Label>
-                  <Data>{(country.population ?? 0).toLocaleString()}</Data>
-                </div>
-                <div>
-                  <Label>Region: </Label> <Data>{country.region ?? "N/A"}</Data>
-                </div>
-                <div>
-                  <Label>Capital: </Label>
-                  <Data>{country.capital ? country.capital[0] : "N/A"}</Data>
-                </div>
-              </DetailsDiv>
-            </InsideBox>
-          </CountryDiv>
-        </Link>
+        {displayedCountries.map((country) => (
+          <Link
+            to={`/country/${country.name.common}`}
+            key={country.name.common}
+          >
+            <CountryDiv $darkMode={darkMode}>
+              <img
+                src={country.flags.png}
+                alt={country.name.common}
+                style={{ width: "100%" }}
+              />
+              <InsideBox>
+                <CountryNames $darkMode={darkMode}>{country.name.common}</CountryNames>
+                <DetailsDiv >
+                  <div>
+                    <Label $darkMode={darkMode}>Population: </Label>
+                    <Data $darkMode={darkMode}>{(country.population ?? 0).toLocaleString()}</Data>
+                  </div>
+                  <div>
+                    <Label $darkMode={darkMode}>Region: </Label>{" "}
+                    <Data $darkMode={darkMode}>{country.region ?? "N/A"}</Data>
+                  </div>
+                  <div>
+                    <Label $darkMode={darkMode}>Capital: </Label>
+                    <Data $darkMode={darkMode}>{country.capital ? country.capital[0] : "N/A"}</Data>
+                  </div>
+                </DetailsDiv>
+              </InsideBox>
+            </CountryDiv>
+          </Link>
         ))}
       </Container>
     </Div>
@@ -133,7 +141,7 @@ function Home() {
 export default Home;
 
 const Div = styled.div`
-  background: #fafafa;
+  background: ${(props) => (props.$darkMode ? "#202C36" : "#fafafa")};
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -144,21 +152,20 @@ const Container = styled.div`
   padding-left: 56px;
   padding-right: 56px;
   box-sizing: border-box;
-  
 `;
 
 const CountryDiv = styled.div`
   border-radius: 5px;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   box-shadow: 0px 0px 7px 2px rgba(0, 0, 0, 0.03);
   overflow: hidden;
-  margin-top: 40px; 
+  margin-top: 40px;
   cursor: pointer;
   width: 264px;
 `;
 
 const CountryNames = styled.h1`
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 18px;
   font-style: normal;
@@ -184,7 +191,7 @@ const DetailsDiv = styled.div`
 
 const Label = styled.span`
   font-weight: 600;
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -193,7 +200,7 @@ const Label = styled.span`
 
 const Data = styled.span`
   font-weight: 300;
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -208,7 +215,7 @@ const InputDiv = styled.div`
   padding-right: 16px;
   box-sizing: border-box;
   border-radius: 5px;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
   height: 48px;
   width: 100%;
@@ -216,7 +223,7 @@ const InputDiv = styled.div`
 `;
 
 const InputStyles = styled.input`
-  color: #c4c4c4;
+  color: ${(props) => (props.$darkMode ? "#fff" : "#c4c4c4")};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
@@ -225,6 +232,15 @@ const InputStyles = styled.input`
   border: none;
   width: 100%;
   padding-left: 12px;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
+
+  &::placeholder {
+    color: ${(props) => (props.$darkMode ? "#fff" : "#c4c4c4")};
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const SearchDiv = styled.div`
@@ -241,7 +257,7 @@ const RegionDiv = styled.div`
   border: none;
   height: 48px;
   border-radius: 5px;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
   padding-left: 24px;
   padding-right: 19px;
@@ -253,7 +269,7 @@ const RegionDiv = styled.div`
 `;
 
 const RegionStyles = styled.h2`
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
@@ -270,7 +286,7 @@ const OptionsDiv = styled.div`
   position: absolute;
   top: 52px;
   width: 100%;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   border-radius: 5px;
   box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
 `;
@@ -282,9 +298,11 @@ const Option = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   cursor: pointer;
   &:hover {
-    background: #f0f0f0;
+    
+    background: ${(props) => (props.$darkMode ? "#6586a4" : "#f0f0f0")};
   }
 `;
 
