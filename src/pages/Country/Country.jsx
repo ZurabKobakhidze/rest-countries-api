@@ -12,16 +12,15 @@ function Country() {
 
   const { darkMode } = useContext(DarkModeContext);
 
-  useEffect(() => {
-    axios
-      .get(`https://restcountries.com/v3.1/name/${name}`)
-      .then((res) => {
-        setCountry(res.data[0]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [name]);
+  axios
+  .get(`https://restcountries.com/v3.1/name/${name}`)
+  .then((res) => {
+    const exactCountry = res.data.find(country => country.name.common.toLowerCase() === name.toLowerCase());
+    setCountry(exactCountry);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
   const nativeNames = Object.values(country.name?.nativeName ?? {})
     .map((name) => name.common)
