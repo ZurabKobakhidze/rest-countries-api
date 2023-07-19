@@ -56,9 +56,7 @@ const MoonDiv = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
 `;
 
-const MoonSize = styled.img`
-  width: 16px;
-  height: 16px;
-`;
+

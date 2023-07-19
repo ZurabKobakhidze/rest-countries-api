@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useContext} from "react";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { Header } from "components/shared";
 import { BackArrow } from "assets/index";
 import { styled } from "styled-components";
+import { DarkModeContext } from "context/DarkModeContext";
 
 function Country() {
   const { name } = useParams();
   const [country, setCountry] = useState({});
+
+  const { darkMode } = useContext(DarkModeContext);
 
   useEffect(() => {
     axios
@@ -27,66 +30,87 @@ function Country() {
   return (
     <div>
       <Header />
-      <MainDiv>
+      <MainDiv $darkMode={darkMode}>
         <Link to="/">
-          <BackDiv>
+          <BackDiv $darkMode={darkMode}>
             <img src={BackArrow} alt="" />
-            <BackH2>back</BackH2>
+            <BackH2 $darkMode={darkMode}>back</BackH2>
           </BackDiv>
         </Link>
         <Container>
           <Flag src={country.flags?.png} alt={country.name?.common} />
           <DataDIv>
-            <CountryName>{country.name?.common}</CountryName>
+            <CountryName $darkMode={darkMode}>{country.name?.common}</CountryName>
             <MiniContainer>
               <div>
                 <div>
-                  <Label>Native Name: </Label> <Data>{nativeNames}</Data>
+                  <Label $darkMode={darkMode}>Native Name: </Label> <Data $darkMode={darkMode}>{nativeNames}</Data>
                 </div>
                 <div>
-                  <Label>Population: </Label>
-                  <Data>{(country.population ?? 0).toLocaleString()}</Data>
+                  <Label $darkMode={darkMode}>Population: </Label>
+                  <Data $darkMode={darkMode}>{(country.population ?? 0).toLocaleString()}</Data>
                 </div>
                 <div>
-                  <Label>Region: </Label> <Data>{country.region ?? "N/A"}</Data>
+                  <Label $darkMode={darkMode}>Region: </Label>{" "}
+                  <Data $darkMode={darkMode}>
+                    {country.region ?? <NotAvailable>N/A</NotAvailable>}
+                  </Data>
                 </div>
                 <div>
-                  <Label>Sub Region:</Label>
-                  <Data>{country.subregion ?? "N/A"}</Data>
+                  <Label $darkMode={darkMode}>Sub Region:</Label>
+                  <Data $darkMode={darkMode}>
+                    {country.subregion ?? <NotAvailable>N/A</NotAvailable>}
+                  </Data>
                 </div>
                 <div>
-                  <Label>Capital: </Label>
-                  <Data>{country.capital ? country.capital[0] : "N/A"}</Data>
+                  <Label $darkMode={darkMode}>Capital: </Label>
+                  <Data $darkMode={darkMode}>
+                    {country.capital ? (
+                      country.capital[0]
+                    ) : (
+                      <NotAvailable>N/A</NotAvailable>
+                    )}
+                  </Data>
                 </div>
               </div>
               <div>
                 <div>
-                  <Label>Top Level Domain: </Label>
-                  <Data>{country.tld?.[0] ?? "N/A"}</Data>
-                </div>
-                <div>
-                  <Label>Currencies: </Label>
-                  <Data>
-                    {Object.keys(country.currencies ?? {})
-                      .map((key) => country.currencies[key].name)
-                      .join(", ") ?? "N/A"}
+                  <Label $darkMode={darkMode}>Top Level Domain: </Label>
+                  <Data $darkMode={darkMode}>
+                    {country.tld?.[0] ?? <NotAvailable>N/A</NotAvailable>}
                   </Data>
                 </div>
                 <div>
-                  <Label> Languages: </Label>
-                  <Data>
-                    {Object.keys(country.languages ?? {})
-                      .map((key) => country.languages[key])
-                      .join(", ") ?? "N/A"}
+                  <Label $darkMode={darkMode}>Currencies: </Label>
+                  <Data $darkMode={darkMode}>
+                    {Object.keys(country.currencies ?? {}).length > 0 ? (
+                      Object.keys(country.currencies)
+                        .map((key) => country.currencies[key].name)
+                        .join(", ")
+                    ) : (
+                      <NotAvailable>N/A</NotAvailable>
+                    )}
+                  </Data>
+                </div>
+                <div>
+                  <Label $darkMode={darkMode}>Languages: </Label>
+                  <Data $darkMode={darkMode}>
+                    {Object.keys(country.languages ?? {}).length > 0 ? (
+                      Object.keys(country.languages)
+                        .map((key) => country.languages[key])
+                        .join(", ")
+                    ) : (
+                      <NotAvailable>N/A</NotAvailable>
+                    )}
                   </Data>
                 </div>
               </div>
             </MiniContainer>
-            <BorderName>Border Countries: </BorderName>
-            <BorderCountriesDiv>
+            <BorderName $darkMode={darkMode}>Border Countries: </BorderName>
+            <BorderCountriesDiv $darkMode={darkMode}>
               {country.borders?.map((borderCountry, index) => (
-                <BorderCountries key={index}>{borderCountry}</BorderCountries>
-              )) ?? "N/A"}
+                <BorderCountries $darkMode={darkMode} key={index}>{borderCountry}</BorderCountries>
+              )) ?? <NotAvailable>N/A</NotAvailable>}
             </BorderCountriesDiv>
           </DataDIv>
         </Container>
@@ -103,11 +127,12 @@ const MainDiv = styled.div`
   box-sizing: border-box;
   padding-top: 40px;
   padding-bottom: 60px;
+  background: ${(props) => (props.$darkMode ? "#202C36" : "#fafafa")};
 `;
 
 const BackDiv = styled.div`
   border-radius: 2px;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.29);
   width: 104px;
   height: 32px;
@@ -119,7 +144,7 @@ const BackDiv = styled.div`
 `;
 
 const BackH2 = styled.h2`
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -141,7 +166,7 @@ const Container = styled.div`
 `;
 
 const CountryName = styled.h1`
-  color: #111517;
+ color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 22px;
   font-style: normal;
@@ -162,7 +187,7 @@ const MiniContainer = styled.div`
 
 const Label = styled.span`
   font-weight: 600;
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -171,7 +196,7 @@ const Label = styled.span`
 
 const Data = styled.span`
   font-weight: 300;
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -179,7 +204,7 @@ const Data = styled.span`
 `;
 
 const BorderName = styled.h1`
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 16px;
   font-style: normal;
@@ -196,14 +221,14 @@ const BorderCountriesDiv = styled.div`
 `;
 
 const BorderCountries = styled.h2`
-  color: #111517;
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
   border-radius: 2px;
-  background: #fff;
+  background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.1);
   width: 96px;
   height: 28px;
@@ -215,4 +240,13 @@ const BorderCountries = styled.h2`
 const Link = styled(RouterLink)`
   text-decoration: none;
   color: inherit;
+`;
+
+const NotAvailable = styled.span`
+  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  font-family: Nunito Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 32px;
 `;
