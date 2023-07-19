@@ -119,11 +119,10 @@ function Home() {
             key={country.name.common}
           >
             <CountryDiv $darkMode={darkMode}>
-              <img
-                src={country.flags.png}
-                alt={country.name.common}
-                style={{ width: "100%" }}
-              />
+              <Flag>
+                <img src={country.flags.png} alt={country.name.common} />
+              </Flag>
+
               <InsideBox>
                 <CountryNames $darkMode={darkMode}>
                   {country.name.common}
@@ -168,7 +167,24 @@ const Div = styled.div`
 const Container = styled.div`
   padding-left: 56px;
   padding-right: 56px;
+  gap: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+  @media (min-width: 1440px) {
+    padding-left: 80px;
+    padding-right: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 74px;
+    margin-top: 48px;
+    width: 100%;
+    justify-items: center;
+    justify-content: space-between;
+  }
 `;
 
 const CountryDiv = styled.div`
@@ -179,6 +195,11 @@ const CountryDiv = styled.div`
   margin-top: 40px;
   cursor: pointer;
   width: 264px;
+  height: 100%;
+  @media (min-width: 1440px) {
+    margin-top: 0;
+    height: 336px;
+  }
 `;
 
 const CountryNames = styled.h1`
@@ -227,7 +248,7 @@ const Data = styled.span`
 const InputDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 24px;
+
   padding-left: 32px;
   padding-right: 16px;
   box-sizing: border-box;
@@ -237,6 +258,9 @@ const InputDiv = styled.div`
   height: 48px;
   width: 100%;
   gap: 12px;
+  @media (min-width: 1440px) {
+    width: 480px;
+  }
 `;
 
 const InputStyles = styled.input`
@@ -267,6 +291,17 @@ const SearchDiv = styled.div`
   gap: 40px;
   display: flex;
   flex-direction: column;
+  margin-top: 24px;
+  @media (min-width: 1440px) {
+    padding-left: 80px;
+    padding-right: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 48px;
+  }
 `;
 
 const RegionDiv = styled.div`
@@ -329,4 +364,16 @@ const SearchButton = styled.img`
 const Link = styled(RouterLink)`
   text-decoration: none;
   color: inherit;
+`;
+
+const Flag = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  @media (min-width: 1440px) {
+    height: 160px;
+  }
 `;
