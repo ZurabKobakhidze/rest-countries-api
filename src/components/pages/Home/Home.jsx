@@ -2,15 +2,30 @@ import React, { useState, useEffect } from "react";
 import { Header } from "components/shared";
 import { styled } from "styled-components";
 import axios from "axios";
+import { SearchIcon } from "assets/index";
 
 function Home() {
   const [countries, setCountries] = useState([]);
+  const [displayedCountries, setDisplayedCountries] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const handleSearch = () => {
+    if (search.trim()) {
+      const filteredCountries = countries.filter((country) =>
+        country.name.common.toLowerCase().includes(search.toLowerCase())
+      );
+      setDisplayedCountries(filteredCountries);
+    } else {
+      setDisplayedCountries(countries);
+    }
+  };
 
   useEffect(() => {
     axios
       .get("https://restcountries.com/v3.1/all")
       .then((res) => {
         setCountries(res.data);
+        setDisplayedCountries(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -20,8 +35,26 @@ function Home() {
   return (
     <Div>
       <Header />
+      <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSearch();
+      }}
+    >
+      <InputDiv>
+        <img src={SearchIcon} alt="" onClick={handleSearch} />
+        <InputStyles
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search for a country…"
+        />
+        <button type="submit" style={{ display: "none" }}>Search</button>
+      </InputDiv>
+    </form>
+
       <Container>
-        {countries.map((country, index) => (
+        {displayedCountries.map((country, index) => (
           <CountryDiv key={index}>
             <img
               src={country.flags.png}
@@ -56,6 +89,9 @@ export default Home;
 const Div = styled.div`
   background: #fafafa;
   min-height: 100vh;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const Container = styled.div`
@@ -115,4 +151,31 @@ const Data = styled.span`
   font-style: normal;
 
   line-height: 16px;
+`;
+
+const InputDiv = styled.div`
+      display: flex;
+    align-items: center;
+    margin-top: 24px;
+    padding-left: 32px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background: #FFF;
+    box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
+    height: 48px;
+    width: 343px;
+    gap: 12px;
+`;
+
+const InputStyles = styled.input`
+  color: #C4C4C4;
+    font-family: Nunito Sans;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    border: none;
+    width: 260px;
+    padding-left: 12px;
 `;
