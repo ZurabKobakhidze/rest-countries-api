@@ -3,6 +3,7 @@ import { Header } from "components/shared";
 import { styled } from "styled-components";
 import axios from "axios";
 import { Arrow, SearchIcon } from "assets/index";
+import { Link as RouterLink } from "react-router-dom";
 
 function Home() {
   const [countries, setCountries] = useState([]);
@@ -73,31 +74,32 @@ function Home() {
           </InputDiv>
         </form>
         <DropdownWrapper onClick={() => setDropdownOpen(!dropdownOpen)}>
-        <RegionDiv>
-          <RegionStyles>{selectedRegion || "Filter by Region"}</RegionStyles>
-          <img src={Arrow} alt="" />
-        </RegionDiv>
-        {dropdownOpen && (
-          <OptionsDiv>
-            {options.map((option, index) => (
-              <Option
-                key={index}
-                onClick={() => {
-                  setSelectedRegion(option);
-                  setDropdownOpen(false);
-                  setRegion(option);
-                }}
-              >
-                {option || "All Region"}
-              </Option>
-            ))}
-          </OptionsDiv>
-        )}
-      </DropdownWrapper>
+          <RegionDiv>
+            <RegionStyles>{selectedRegion || "Filter by Region"}</RegionStyles>
+            <img src={Arrow} alt="" />
+          </RegionDiv>
+          {dropdownOpen && (
+            <OptionsDiv>
+              {options.map((option, index) => (
+                <Option
+                  key={index}
+                  onClick={() => {
+                    setSelectedRegion(option);
+                    setDropdownOpen(false);
+                    setRegion(option);
+                  }}
+                >
+                  {option || "All Region"}
+                </Option>
+              ))}
+            </OptionsDiv>
+          )}
+        </DropdownWrapper>
       </SearchDiv>
 
       <Container>
         {displayedCountries.map((country, index) => (
+          <Link to={`/country/${country.name.common}`}>
           <CountryDiv key={index}>
             <img
               src={country.flags.png}
@@ -121,6 +123,7 @@ function Home() {
               </DetailsDiv>
             </InsideBox>
           </CountryDiv>
+        </Link>
         ))}
       </Container>
     </Div>
@@ -141,6 +144,7 @@ const Container = styled.div`
   padding-left: 56px;
   padding-right: 56px;
   box-sizing: border-box;
+  
 `;
 
 const CountryDiv = styled.div`
@@ -148,7 +152,8 @@ const CountryDiv = styled.div`
   background: #fff;
   box-shadow: 0px 0px 7px 2px rgba(0, 0, 0, 0.03);
   overflow: hidden;
-  margin-top: 40px;
+  margin-top: 40px; 
+  cursor: pointer;
 `;
 
 const CountryNames = styled.h1`
@@ -286,4 +291,9 @@ const Option = styled.div`
 
 const SearchButton = styled.img`
   cursor: pointer;
+`;
+
+const Link = styled(RouterLink)`
+  text-decoration: none;
+  color: inherit;
 `;
