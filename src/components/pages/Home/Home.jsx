@@ -154,6 +154,7 @@ const CountryDiv = styled.div`
   overflow: hidden;
   margin-top: 40px; 
   cursor: pointer;
+  width: 264px;
 `;
 
 const CountryNames = styled.h1`
@@ -187,7 +188,6 @@ const Label = styled.span`
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
-
   line-height: 16px;
 `;
 
@@ -197,7 +197,6 @@ const Data = styled.span`
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
-
   line-height: 16px;
 `;
 
