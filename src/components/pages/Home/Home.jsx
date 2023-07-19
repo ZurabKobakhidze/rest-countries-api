@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Header } from "components/shared";
 import { styled } from "styled-components";
 import axios from "axios";
-import { SearchIcon } from "assets/index";
+import { Arrow, SearchIcon } from "assets/index";
 
 function Home() {
   const [countries, setCountries] = useState([]);
   const [displayedCountries, setDisplayedCountries] = useState([]);
   const [search, setSearch] = useState("");
+  const [region, setRegion] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState("");
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -21,37 +24,77 @@ function Home() {
   };
 
   useEffect(() => {
-    axios
-      .get("https://restcountries.com/v3.1/all")
-      .then((res) => {
-        setCountries(res.data);
-        setDisplayedCountries(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    if (region) {
+      axios
+        .get(`https://restcountries.com/v3.1/region/${region}`)
+        .then((res) => {
+          setCountries(res.data);
+          setDisplayedCountries(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      axios
+        .get("https://restcountries.com/v3.1/all")
+        .then((res) => {
+          setCountries(res.data);
+          setDisplayedCountries(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [region]);
+
+  const options = ["", "Africa", "Americas", "Asia", "Europe", "Oceania"];
 
   return (
     <Div>
       <Header />
-      <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSearch();
-      }}
-    >
-      <InputDiv>
-        <img src={SearchIcon} alt="" onClick={handleSearch} />
-        <InputStyles
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search for a country…"
-        />
-        <button type="submit" style={{ display: "none" }}>Search</button>
-      </InputDiv>
-    </form>
+      <SearchDiv>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+        >
+          <InputDiv>
+            <SearchButton src={SearchIcon} alt="" onClick={handleSearch} />
+            <InputStyles
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search for a country…"
+            />
+            <button type="submit" style={{ display: "none" }}>
+              Search
+            </button>
+          </InputDiv>
+        </form>
+        <DropdownWrapper onClick={() => setDropdownOpen(!dropdownOpen)}>
+        <RegionDiv>
+          <RegionStyles>{selectedRegion || "Filter by Region"}</RegionStyles>
+          <img src={Arrow} alt="" />
+        </RegionDiv>
+        {dropdownOpen && (
+          <OptionsDiv>
+            {options.map((option, index) => (
+              <Option
+                key={index}
+                onClick={() => {
+                  setSelectedRegion(option);
+                  setDropdownOpen(false);
+                  setRegion(option);
+                }}
+              >
+                {option || "All Region"}
+              </Option>
+            ))}
+          </OptionsDiv>
+        )}
+      </DropdownWrapper>
+      </SearchDiv>
 
       <Container>
         {displayedCountries.map((country, index) => (
@@ -90,8 +133,8 @@ const Div = styled.div`
   background: #fafafa;
   min-height: 100vh;
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Container = styled.div`
@@ -154,28 +197,93 @@ const Data = styled.span`
 `;
 
 const InputDiv = styled.div`
-      display: flex;
-    align-items: center;
-    margin-top: 24px;
-    padding-left: 32px;
-    padding-right: 16px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    background: #FFF;
-    box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
-    height: 48px;
-    width: 343px;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  padding-left: 32px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
+  height: 48px;
+  width: 100%;
+  gap: 12px;
 `;
 
 const InputStyles = styled.input`
-  color: #C4C4C4;
-    font-family: Nunito Sans;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px;
-    border: none;
-    width: 260px;
-    padding-left: 12px;
+  color: #c4c4c4;
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  border: none;
+  width: 100%;
+  padding-left: 12px;
+`;
+
+const SearchDiv = styled.div`
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  gap: 40px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const RegionDiv = styled.div`
+  width: 200px;
+  border: none;
+  height: 48px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
+  padding-left: 24px;
+  padding-right: 19px;
+  box-sizing: border-box;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const RegionStyles = styled.h2`
+  color: #111517;
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
+  width: 200px;
+`;
+
+const OptionsDiv = styled.div`
+  position: absolute;
+  top: 52px;
+  width: 100%;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
+`;
+
+const Option = styled.div`
+  padding: 8px 24px;
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  cursor: pointer;
+  &:hover {
+    background: #f0f0f0;
+  }
+`;
+
+const SearchButton = styled.img`
+  cursor: pointer;
 `;
