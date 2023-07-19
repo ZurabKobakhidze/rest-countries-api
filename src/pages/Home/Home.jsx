@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Header } from "components/shared";
 import { styled } from "styled-components";
 import axios from "axios";
-import { Arrow, SearchIcon } from "assets/index";
+import { Arrow, ArrowWhite, SearchIcon, SearchIconWhite } from "assets/index";
 import { Link as RouterLink } from "react-router-dom";
 import { DarkModeContext } from "context/DarkModeContext";
 
@@ -64,7 +64,11 @@ function Home() {
           }}
         >
           <InputDiv $darkMode={darkMode}>
-            <SearchButton src={SearchIcon} alt="" onClick={handleSearch} />
+            <SearchButton
+              src={darkMode ? SearchIconWhite : SearchIcon}
+              alt=""
+              onClick={handleSearch}
+            />
             <InputStyles
               type="text"
               value={search}
@@ -79,13 +83,20 @@ function Home() {
         </form>
         <DropdownWrapper onClick={() => setDropdownOpen(!dropdownOpen)}>
           <RegionDiv $darkMode={darkMode}>
-            <RegionStyles $darkMode={darkMode}>{selectedRegion || "Filter by Region"}</RegionStyles>
-            <img src={Arrow} alt="" />
-          </RegionDiv >
+            <RegionStyles $darkMode={darkMode}>
+              {selectedRegion || "Filter by Region"}
+            </RegionStyles>
+            {darkMode ? (
+              <img src={ArrowWhite} alt="" />
+            ) : (
+              <img src={Arrow} alt="" />
+            )}
+          </RegionDiv>
           {dropdownOpen && (
             <OptionsDiv $darkMode={darkMode}>
               {options.map((option, index) => (
-                <Option $darkMode={darkMode}
+                <Option
+                  $darkMode={darkMode}
                   key={index}
                   onClick={() => {
                     setSelectedRegion(option);
@@ -114,11 +125,15 @@ function Home() {
                 style={{ width: "100%" }}
               />
               <InsideBox>
-                <CountryNames $darkMode={darkMode}>{country.name.common}</CountryNames>
-                <DetailsDiv >
+                <CountryNames $darkMode={darkMode}>
+                  {country.name.common}
+                </CountryNames>
+                <DetailsDiv>
                   <div>
                     <Label $darkMode={darkMode}>Population: </Label>
-                    <Data $darkMode={darkMode}>{(country.population ?? 0).toLocaleString()}</Data>
+                    <Data $darkMode={darkMode}>
+                      {(country.population ?? 0).toLocaleString()}
+                    </Data>
                   </div>
                   <div>
                     <Label $darkMode={darkMode}>Region: </Label>{" "}
@@ -126,7 +141,9 @@ function Home() {
                   </div>
                   <div>
                     <Label $darkMode={darkMode}>Capital: </Label>
-                    <Data $darkMode={darkMode}>{country.capital ? country.capital[0] : "N/A"}</Data>
+                    <Data $darkMode={darkMode}>
+                      {country.capital ? country.capital[0] : "N/A"}
+                    </Data>
                   </div>
                 </DetailsDiv>
               </InsideBox>
@@ -165,7 +182,7 @@ const CountryDiv = styled.div`
 `;
 
 const CountryNames = styled.h1`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 18px;
   font-style: normal;
@@ -191,7 +208,7 @@ const DetailsDiv = styled.div`
 
 const Label = styled.span`
   font-weight: 600;
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -200,7 +217,7 @@ const Label = styled.span`
 
 const Data = styled.span`
   font-weight: 300;
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -269,7 +286,7 @@ const RegionDiv = styled.div`
 `;
 
 const RegionStyles = styled.h2`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
@@ -298,10 +315,9 @@ const Option = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   cursor: pointer;
   &:hover {
-    
     background: ${(props) => (props.$darkMode ? "#6586a4" : "#f0f0f0")};
   }
 `;

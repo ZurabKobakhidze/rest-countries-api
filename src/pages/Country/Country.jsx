@@ -1,8 +1,8 @@
-import React, { useEffect, useState , useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { Header } from "components/shared";
-import { BackArrow } from "assets/index";
+import { BackArrow, BackArrowWhite } from "assets/index";
 import { styled } from "styled-components";
 import { DarkModeContext } from "context/DarkModeContext";
 
@@ -33,22 +33,32 @@ function Country() {
       <MainDiv $darkMode={darkMode}>
         <Link to="/">
           <BackDiv $darkMode={darkMode}>
-            <img src={BackArrow} alt="" />
+            {darkMode ? (
+              <img src={BackArrowWhite} alt="" />
+            ) : (
+              <img src={BackArrow} alt="" />
+            )}
+
             <BackH2 $darkMode={darkMode}>back</BackH2>
           </BackDiv>
         </Link>
         <Container>
           <Flag src={country.flags?.png} alt={country.name?.common} />
           <DataDIv>
-            <CountryName $darkMode={darkMode}>{country.name?.common}</CountryName>
+            <CountryName $darkMode={darkMode}>
+              {country.name?.common}
+            </CountryName>
             <MiniContainer>
               <div>
                 <div>
-                  <Label $darkMode={darkMode}>Native Name: </Label> <Data $darkMode={darkMode}>{nativeNames}</Data>
+                  <Label $darkMode={darkMode}>Native Name: </Label>{" "}
+                  <Data $darkMode={darkMode}>{nativeNames}</Data>
                 </div>
                 <div>
                   <Label $darkMode={darkMode}>Population: </Label>
-                  <Data $darkMode={darkMode}>{(country.population ?? 0).toLocaleString()}</Data>
+                  <Data $darkMode={darkMode}>
+                    {(country.population ?? 0).toLocaleString()}
+                  </Data>
                 </div>
                 <div>
                   <Label $darkMode={darkMode}>Region: </Label>{" "}
@@ -109,7 +119,9 @@ function Country() {
             <BorderName $darkMode={darkMode}>Border Countries: </BorderName>
             <BorderCountriesDiv $darkMode={darkMode}>
               {country.borders?.map((borderCountry, index) => (
-                <BorderCountries $darkMode={darkMode} key={index}>{borderCountry}</BorderCountries>
+                <BorderCountries $darkMode={darkMode} key={index}>
+                  {borderCountry}
+                </BorderCountries>
               )) ?? <NotAvailable>N/A</NotAvailable>}
             </BorderCountriesDiv>
           </DataDIv>
@@ -144,7 +156,7 @@ const BackDiv = styled.div`
 `;
 
 const BackH2 = styled.h2`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -166,7 +178,7 @@ const Container = styled.div`
 `;
 
 const CountryName = styled.h1`
- color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 22px;
   font-style: normal;
@@ -187,7 +199,7 @@ const MiniContainer = styled.div`
 
 const Label = styled.span`
   font-weight: 600;
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -196,7 +208,7 @@ const Label = styled.span`
 
 const Data = styled.span`
   font-weight: 300;
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
@@ -204,7 +216,7 @@ const Data = styled.span`
 `;
 
 const BorderName = styled.h1`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 16px;
   font-style: normal;
@@ -221,7 +233,7 @@ const BorderCountriesDiv = styled.div`
 `;
 
 const BorderCountries = styled.h2`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
@@ -243,7 +255,7 @@ const Link = styled(RouterLink)`
 `;
 
 const NotAvailable = styled.span`
-  color: ${props => props.$darkMode ? '#fff' : '#111517'};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 14px;
   font-style: normal;
