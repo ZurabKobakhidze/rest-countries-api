@@ -87,9 +87,9 @@ function Home() {
               {selectedRegion || "Filter by Region"}
             </RegionStyles>
             {darkMode ? (
-              <img src={ArrowWhite} alt="" />
+              <ArrowImg src={ArrowWhite} alt="" />
             ) : (
-              <img src={Arrow} alt="" />
+              <ArrowImg src={Arrow} alt="" />
             )}
           </RegionDiv>
           {dropdownOpen && (
@@ -260,6 +260,7 @@ const InputDiv = styled.div`
   gap: 12px;
   @media (min-width: 1440px) {
     width: 480px;
+    height: 56px;
   }
 `;
 
@@ -281,6 +282,10 @@ const InputStyles = styled.input`
 
   &:focus {
     outline: none;
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 14px;
   }
 `;
 
@@ -318,6 +323,9 @@ const RegionDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (min-width: 1440px) {
+    height: 56px;
+  }
 `;
 
 const RegionStyles = styled.h2`
@@ -327,6 +335,9 @@ const RegionStyles = styled.h2`
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  @media (min-width: 1440px) {
+    font-size: 14px;
+  }
 `;
 
 const DropdownWrapper = styled.div`
@@ -341,6 +352,9 @@ const OptionsDiv = styled.div`
   background: ${(props) => (props.$darkMode ? "#2B3844" : "#fafafa")};
   border-radius: 5px;
   box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.05);
+  @media (min-width: 1440px) {
+    top: 60px;
+  }
 `;
 
 const Option = styled.div`
@@ -355,10 +369,19 @@ const Option = styled.div`
   &:hover {
     background: ${(props) => (props.$darkMode ? "#6586a4" : "#f0f0f0")};
   }
+  @media (min-width: 1440px) {
+    font-size: 14px;
+  }
 `;
 
 const SearchButton = styled.img`
   cursor: pointer;
+  width: 16px;
+  height: 16px;
+  @media (min-width: 1440px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const Link = styled(RouterLink)`
@@ -375,5 +398,14 @@ const Flag = styled.div`
   overflow: hidden;
   @media (min-width: 1440px) {
     height: 160px;
+  }
+`;
+
+const ArrowImg = styled.img`
+  width: 10px;
+  height: 10px;
+  @media (min-width: 1440px) {
+    width: 12px;
+    height: 12px;
   }
 `;
