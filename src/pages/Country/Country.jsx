@@ -34,9 +34,9 @@ function Country() {
         <Link to="/">
           <BackDiv $darkMode={darkMode}>
             {darkMode ? (
-              <img src={BackArrowWhite} alt="" />
+              <BackImg src={BackArrowWhite} alt="" />
             ) : (
-              <img src={BackArrow} alt="" />
+              <BackImg src={BackArrow} alt="" />
             )}
 
             <BackH2 $darkMode={darkMode}>back</BackH2>
@@ -51,7 +51,7 @@ function Country() {
             <MiniContainer>
               <div>
                 <div>
-                  <Label $darkMode={darkMode}>Native Name: </Label>{" "}
+                  <Label $darkMode={darkMode}>Native Name: </Label>
                   <Data $darkMode={darkMode}>{nativeNames}</Data>
                 </div>
                 <div>
@@ -61,15 +61,15 @@ function Country() {
                   </Data>
                 </div>
                 <div>
-                  <Label $darkMode={darkMode}>Region: </Label>{" "}
+                  <Label $darkMode={darkMode}>Region: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.region ?? <NotAvailable>N/A</NotAvailable>}
+                    {country.region ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
                   </Data>
                 </div>
                 <div>
-                  <Label $darkMode={darkMode}>Sub Region:</Label>
+                  <Label $darkMode={darkMode}>Sub Region: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.subregion ?? <NotAvailable>N/A</NotAvailable>}
+                    {country.subregion ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
                   </Data>
                 </div>
                 <div>
@@ -78,7 +78,7 @@ function Country() {
                     {country.capital ? (
                       country.capital[0]
                     ) : (
-                      <NotAvailable>N/A</NotAvailable>
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
                     )}
                   </Data>
                 </div>
@@ -87,7 +87,7 @@ function Country() {
                 <div>
                   <Label $darkMode={darkMode}>Top Level Domain: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.tld?.[0] ?? <NotAvailable>N/A</NotAvailable>}
+                    {country.tld?.[0] ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
                   </Data>
                 </div>
                 <div>
@@ -98,7 +98,7 @@ function Country() {
                         .map((key) => country.currencies[key].name)
                         .join(", ")
                     ) : (
-                      <NotAvailable>N/A</NotAvailable>
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
                     )}
                   </Data>
                 </div>
@@ -110,20 +110,22 @@ function Country() {
                         .map((key) => country.languages[key])
                         .join(", ")
                     ) : (
-                      <NotAvailable>N/A</NotAvailable>
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
                     )}
                   </Data>
                 </div>
               </div>
             </MiniContainer>
-            <BorderName $darkMode={darkMode}>Border Countries: </BorderName>
-            <BorderCountriesDiv $darkMode={darkMode}>
-              {country.borders?.map((borderCountry, index) => (
-                <BorderCountries $darkMode={darkMode} key={index}>
-                  {borderCountry}
-                </BorderCountries>
-              )) ?? <NotAvailable>N/A</NotAvailable>}
-            </BorderCountriesDiv>
+            <BorderDiv>
+              <BorderName $darkMode={darkMode}>Border Countries: </BorderName>
+              <BorderCountriesDiv $darkMode={darkMode}>
+                {country.borders?.map((borderCountry, index) => (
+                  <BorderCountries $darkMode={darkMode} key={index}>
+                    {borderCountry}
+                  </BorderCountries>
+                )) ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
+              </BorderCountriesDiv>
+            </BorderDiv>
           </DataDIv>
         </Container>
       </MainDiv>
@@ -139,7 +141,12 @@ const MainDiv = styled.div`
   box-sizing: border-box;
   padding-top: 40px;
   padding-bottom: 60px;
+  min-height: 100vh;
   background: ${(props) => (props.$darkMode ? "#202C36" : "#fafafa")};
+  @media (min-width: 1440px) {
+    padding-left: 80px;
+    padding-right: 80px;
+  }
 `;
 
 const BackDiv = styled.div`
@@ -153,6 +160,11 @@ const BackDiv = styled.div`
   flex-direction: row;
   justify-content: center;
   gap: 8px;
+  @media (min-width: 1440px) {
+    width: 136px;
+    height: 40px;
+    gap: 10px;
+  }
 `;
 
 const BackH2 = styled.h2`
@@ -162,11 +174,26 @@ const BackH2 = styled.h2`
   font-style: normal;
   font-weight: 300;
   line-height: 20px;
+  @media (min-width: 1440px) {
+    font-size: 16px;
+  }
+`;
+
+const BackImg = styled.img`
+  width: 18px;
+  height: 18px;
+  @media (min-width: 1440px) {
+    width: 20px;
+  height: 20px;
+  }
 `;
 
 const Flag = styled.img`
   border-radius: 5px;
   width: 100%;
+  @media (min-width: 1440px) {
+    width: 560px;
+  }
 `;
 
 const Container = styled.div`
@@ -175,6 +202,13 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  @media (min-width: 1440px) {
+    gap: 120px;
+    margin-top: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 const CountryName = styled.h1`
@@ -184,10 +218,23 @@ const CountryName = styled.h1`
   font-style: normal;
   font-weight: 800;
   line-height: normal;
+  @media (min-width: 1440px) {
+    font-family: Nunito Sans;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+  }
 `;
 
 const DataDIv = styled.div`
   margin-top: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  @media (min-width: 1440px) {
+    margin-top: 0;
+  }
 `;
 
 const MiniContainer = styled.div`
@@ -195,6 +242,12 @@ const MiniContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  @media (min-width: 1440px) {
+    gap: 121px;
+    margin-top: 23px;
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 const Label = styled.span`
@@ -204,6 +257,9 @@ const Label = styled.span`
   font-size: 14px;
   font-style: normal;
   line-height: 32px;
+  @media (min-width: 1440px) {
+    font-size: 16px;
+  }
 `;
 
 const Data = styled.span`
@@ -213,6 +269,9 @@ const Data = styled.span`
   font-size: 14px;
   font-style: normal;
   line-height: 32px;
+  @media (min-width: 1440px) {
+    font-size: 16px;
+  }
 `;
 
 const BorderName = styled.h1`
@@ -221,8 +280,7 @@ const BorderName = styled.h1`
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px;
-  margin-top: 34px;
+  line-height: 32px;
 `;
 
 const BorderCountriesDiv = styled.div`
@@ -230,6 +288,9 @@ const BorderCountriesDiv = styled.div`
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 16px;
+  @media (min-width: 1440px) {
+    margin-top: 0;
+  }
 `;
 
 const BorderCountries = styled.h2`
@@ -261,4 +322,19 @@ const NotAvailable = styled.span`
   font-style: normal;
   font-weight: 300;
   line-height: 32px;
+`;
+
+const BorderDiv = styled.div`
+  margin-top: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  @media (min-width: 1440px) {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+  }
 `;

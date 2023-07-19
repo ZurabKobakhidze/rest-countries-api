@@ -265,7 +265,7 @@ const InputDiv = styled.div`
 `;
 
 const InputStyles = styled.input`
-  color: ${(props) => (props.$darkMode ? "#fff" : "#c4c4c4")};
+  color: ${(props) => (props.$darkMode ? "#fff" : "#111517")};
   font-family: Nunito Sans;
   font-size: 12px;
   font-style: normal;
