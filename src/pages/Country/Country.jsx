@@ -12,16 +12,20 @@ function Country() {
 
   const { darkMode } = useContext(DarkModeContext);
 
-  axios
-  .get(`https://restcountries.com/v3.1/name/${name}`)
-  .then((res) => {
-    const exactCountry = res.data.find(country => country.name.common.toLowerCase() === name.toLowerCase());
-    setCountry(exactCountry);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+  useEffect(() => {
+    axios
+      .get(`https://restcountries.com/v3.1/name/${name}`)
+      .then((res) => {
+        const exactCountry = res.data.find(
+          (country) => country.name.common.toLowerCase() === name.toLowerCase()
+        );
+        setCountry(exactCountry);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [name]);
+  
   const nativeNames = Object.values(country.name?.nativeName ?? {})
     .map((name) => name.common)
     .join(", ");
@@ -62,13 +66,17 @@ function Country() {
                 <div>
                   <Label $darkMode={darkMode}>Region: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.region ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
+                    {country.region ?? (
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
+                    )}
                   </Data>
                 </div>
                 <div>
                   <Label $darkMode={darkMode}>Sub Region: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.subregion ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
+                    {country.subregion ?? (
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
+                    )}
                   </Data>
                 </div>
                 <div>
@@ -86,7 +94,9 @@ function Country() {
                 <div>
                   <Label $darkMode={darkMode}>Top Level Domain: </Label>
                   <Data $darkMode={darkMode}>
-                    {country.tld?.[0] ?? <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>}
+                    {country.tld?.[0] ?? (
+                      <NotAvailable $darkMode={darkMode}>N/A</NotAvailable>
+                    )}
                   </Data>
                 </div>
                 <div>
@@ -183,7 +193,7 @@ const BackImg = styled.img`
   height: 18px;
   @media (min-width: 1440px) {
     width: 20px;
-  height: 20px;
+    height: 20px;
   }
 `;
 

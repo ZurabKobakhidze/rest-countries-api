@@ -8,6 +8,7 @@ import { DarkModeContext } from "context/DarkModeContext";
 
 function Home() {
   const [countries, setCountries] = useState([]);
+  const [allCountries, setAllCountries] = useState([]);
   const [displayedCountries, setDisplayedCountries] = useState([]);
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("");
@@ -28,28 +29,22 @@ function Home() {
   };
 
   useEffect(() => {
-    if (region) {
-      axios
-        .get(`https://restcountries.com/v3.1/region/${region}`)
-        .then((res) => {
-          setCountries(res.data);
-          setDisplayedCountries(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
+    if (allCountries.length === 0) {
       axios
         .get("https://restcountries.com/v3.1/all")
         .then((res) => {
           setCountries(res.data);
           setDisplayedCountries(res.data);
+          setAllCountries(res.data); 
         })
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      setCountries(allCountries); 
+      setDisplayedCountries(allCountries);
     }
-  }, [region]);
+  }, []);
 
   const options = ["", "Africa", "Americas", "Asia", "Europe", "Oceania"];
 
@@ -101,7 +96,16 @@ function Home() {
                   onClick={() => {
                     setSelectedRegion(option);
                     setDropdownOpen(false);
-                    setRegion(option);
+                    if (option) {
+                      const filteredCountries = allCountries.filter(
+                        (country) => country.region === option
+                      );
+                      setCountries(filteredCountries);
+                      setDisplayedCountries(filteredCountries);
+                    } else {
+                      setCountries(allCountries);
+                      setDisplayedCountries(allCountries);
+                    }
                   }}
                 >
                   {option || "All Region"}
